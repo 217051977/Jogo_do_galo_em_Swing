@@ -3,11 +3,11 @@ import java.awt.*;
 
 public class ToolBarImage extends JToolBar {
 
-    private ImageIcon bgImage;
+    private ImageIcon image;
 
     ToolBarImage(ImageIcon image) {
 
-        this.bgImage = image;
+        this.image = image;
         setOpaque(true);
 
     }
@@ -15,10 +15,10 @@ public class ToolBarImage extends JToolBar {
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        if (bgImage != null) {
+        if (image != null) {
 
             Dimension size = this.getSize();
-            g.drawImage(bgImage.getImage(), 0,0, size.width, size.height, this);
+            g.drawImage(image.getImage(), 0,0, size.width, size.height, this);
 
         }
 

@@ -1,16 +1,20 @@
 public class Shift {
 
-    int count = 0;
+    //set a counter
+    private int count = 0;
 
+    //constructor
     Shift() {}
 
-    public int getShiftCounter() {
+    //get
+    int getShiftCounter() {
 
         return count;
 
     }
 
-    public void nextShift() {
+    //shift adder
+    void nextShift() {
 
         count++;
 
