@@ -1,21 +1,35 @@
 public class Shift {
 
-    //set a counter
+    /*
+    * Creates the shiftCounter
+    * */
     private int count = 0;
 
-    //constructor
+    /*
+    * Empty constructor
+    * */
     Shift() {}
 
-    //get
+    /*
+    * Get the shiftCounter (count)
+    * */
     int getShiftCounter() {
 
+        /*
+        * Return the value of the variable count
+        * */
         return count;
 
     }
 
-    //shift adder
+    /*
+    * ShiftCounter Adder
+    * */
     void nextShift() {
 
+        /*
+        * add one unit to the count variable
+        * */
         count++;
 
     }

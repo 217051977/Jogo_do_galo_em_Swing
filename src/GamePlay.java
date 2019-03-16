@@ -5,9 +5,14 @@ import java.util.List;
 
 public class GamePlay {
 
-    //set the size of the window
+    /*
+    * Set the size of the window
+    * Create a button List
+    * Create a String to keep the Winner
+    * */
     private static int WIDTH = 600, HEIGHT = 700;
-    static List<Button> buttons = new ArrayList<>();
+    private static List<Button> buttons = new ArrayList<>();
+    private static String gameResult = "";
 
     public static void main(String[] args) {
 
@@ -20,6 +25,11 @@ public class GamePlay {
 
     private static void createAndShowGUI() {
 
+        /*
+        * Creates a Shift type object
+        * Creates nine Button type objects to keep the track of each one in the game
+        * Add this 9 Button type objects to the buttons list
+        * */
         Shift shift = new Shift();
         Button topLeftVar = new Button("topLeft");
         Button topVar = new Button("top");
@@ -30,8 +40,6 @@ public class GamePlay {
         Button botLeftVar = new Button("botLeft");
         Button botVar = new Button("bot");
         Button botRightVar = new Button("botRight");
-
-
         buttons.add(topLeftVar);
         buttons.add(topVar);
         buttons.add(topRightVar);
@@ -42,8 +50,12 @@ public class GamePlay {
         buttons.add(botVar);
         buttons.add(botRightVar);
 
-        //creates the window
+        /*
+        * Creates the window
+        * Set the frame in the middle of the screen
+        * */
         JFrame frame = createFrame("Cock Game", WIDTH, HEIGHT);
+        frame.setLocationRelativeTo(null);
 
         /*
         * Declares and initialize a toolbar so it can get the buttons
@@ -87,12 +99,18 @@ public class GamePlay {
         * */
         frame.setVisible(true);
 
+        /*
+        * For every JButton, adds an Action Lister so every time the button is pressed:
+        * - Check if that same button has already been activated, and if not,
+        * - Set an image of the player move (X or O)
+        * - Check if the game has ended
+        * */
         topLeft.addActionListener(event -> {
 
             if (topLeftVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 topLeft.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -102,8 +120,8 @@ public class GamePlay {
 
             if (topVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 top.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -113,8 +131,8 @@ public class GamePlay {
 
             if (topRightVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 topRight.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -124,8 +142,8 @@ public class GamePlay {
 
             if (midLeftVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 midLeft.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -135,8 +153,8 @@ public class GamePlay {
 
             if (midVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 mid.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -146,8 +164,8 @@ public class GamePlay {
 
             if (midRightVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 midRight.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -157,8 +175,8 @@ public class GamePlay {
 
             if (botLeftVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 botLeft.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -168,8 +186,8 @@ public class GamePlay {
 
             if (botVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 bot.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -179,8 +197,8 @@ public class GamePlay {
 
             if (botRightVar.AddPlay(shift)) {
 
-                showResultScreen(shift);
                 botRight.setIcon(getPlayIcon(shift));
+                showResultScreen(shift, frame);
 
             }
 
@@ -190,25 +208,30 @@ public class GamePlay {
 
     private static ImageIcon getIcon() {
 
-        //return the image with that specific name
+        /*
+        * Return the image with that specific name
+        * */
         return new ImageIcon(GamePlay.class.getResource("Board.gif"));
 
     }
 
     private static ImageIcon getPlayIcon(Shift shift) {
 
-        //add a unit to the shift counter
+        /*
+        * Add a unit to the shift counter
+        * Check if the shiftCounter is par, and if so:
+        * - Get and return the image with the name "X.png"
+        * If the shiftCounter is odd:
+        * - Get and return the image with the name "O.png"
+        * */
         shift.nextShift();
 
-        //if the shift counter is par
         if (shift.getShiftCounter() % 2 == 0) {
 
-            //return the X image
             return new ImageIcon(GamePlay.class.getResource("X.png"));
 
         }
 
-        //return the O image
         return new ImageIcon(GamePlay.class.getResource("O.png"));
 
     }
@@ -220,49 +243,111 @@ public class GamePlay {
          * Set the frame to close when click on the "X" of the window it self
          * Set the frame as not resizable
          * Create a layout of the contentPane where the border layout with no margins between components
-         * Set the frame in the middle of the screen
+         * Return the frame
          * */
         JFrame frame = new JFrame(name);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH, HEIGHT);
         frame.setResizable(false);
         frame.getContentPane().setLayout(new BorderLayout());
-        frame.setLocationRelativeTo(null);
 
         return frame;
 
     }
 
-    private static void showResultScreen(Shift shift) {
+    private static void showResultScreen(Shift shift, JFrame frame) {
 
-        if (gameOver()) {
+        /*
+        * Creates an int type variable called gameOverReturned to keep the value of the return of the function gameOver
+        * Check if the gameOverReturned has the value different of 0 (the game has ended), and if so:
+        * - Creates an JFrame called resultFrame
+        * - Set the position of the resultFrame relative to the frame received as a parameter (game window)
+        * - Set the resultFrame always on top of the frame
+        * - Creates an JLabel called winner
+        * - Creates a Font
+        * - Checks if the gameResult variable is empty, and if so:
+        * - - Check if the value of the gameOverReturned is 1, and if so:
+        * - - - Check if the shiftCounter is par, and if so:
+        * - - - - Set the value of the gameResult variable as "Winner is the X team!"
+        * - - - If the shiftCounter is odd:
+        * - - - - Set the value of the gameResult variable as "Winner is the O team!"
+        * - - If is the value of the variable gameOverReturned is not an 0 or an 1:
+        * - - - Set the value of the gameResult variable as "Is a Draw!"
+        * - Initialize the winner JLabel with the gameResult variable
+        * - Set the font to the winner JLabel
+        * - Add the winner to the resultFrame
+        * - Set the resultFrame visible
+        * */
+
+        int gameOverReturned = gameOver();
+
+        if (gameOverReturned != 0) {
 
             JFrame resultFrame = createFrame("Winner", 400, 100);
+            resultFrame.setLocationRelativeTo(frame);
+            resultFrame.setAlwaysOnTop(true);
             JLabel winner;
             Font font = new Font("Jokerman", Font.PLAIN, 35);
 
-            if (shift.getShiftCounter() % 2 == 0) {
+            if (gameResult.equals("")) {
 
-                winner = new JLabel("Winner is the O team!");
+                if (gameOverReturned == 1) {
 
-            }else {
+                    if (shift.getShiftCounter() % 2 == 0) {
 
-                winner = new JLabel("Winner is the X team!");
+                        gameResult = "Winner is the X team!";
+
+                    } else {
+
+                        gameResult = "Winner is the O team!";
+
+                    }
+
+                } else {
+
+                    gameResult = "Is a Draw!";
+
+                }
 
             }
 
+            winner = new JLabel(gameResult);
             winner.setFont(font);
             resultFrame.add(winner);
-
             resultFrame.setVisible(true);
 
         }
 
     }
 
-    private static boolean gameOver() {
+    private static int gameOver() {
 
+        /*
+         * Creates a char type variable so it knows which character to look for
+         * Creates an int type variable so it can keep the number of buttons that have a play in it
+         * Check if there is 3 button with the same character in it
+         *
+         * - After checking the first button
+         * - Keeps the value of character in it in the charToCheck variable
+         * - search for that same character in the next 3 buttons. This is the order of this searching:
+         * - - topLeft -> top -> topRight
+         * - - topLeft -> mid -> botRight
+         * - - topLeft -> midLeft -> botLeft
+         * - - midLeft -> mid -> midRight
+         * - - botLeft -> bot -> botRight
+         * - - botLeft -> mid -> topRight
+         * - - topLeft -> mid -> botRight
+         * - - topLeft -> midLeft -> botLeft
+         * - - top -> mid -> bot
+         * - - topRight -> midRight -> botRight
+         *
+         * Check how many buttons have a play in it already
+         * If the value of the buttonsWithPlayInIt variable is 9 then:
+         * - Return 2
+         * Return 0
+         * */
         char charToCheck;
+        int buttonsWithPlayInIt = 0;
 
         for (Button button : buttons) {
 
@@ -274,42 +359,46 @@ public class GamePlay {
 
                     if(button2.getCharInIt() == charToCheck) {
 
-                        if (button2.getName().equals("top")) {
+                        switch (button2.getName()) {
+                            case "top":
 
-                            for (Button button3 : buttons) {
+                                for (Button button3 : buttons) {
 
-                                if (button3.getName().equals("topRight") && button3.getCharInIt() == charToCheck) {
+                                    if (button3.getName().equals("topRight") && button3.getCharInIt() == charToCheck) {
 
-                                    return true;
+                                        return 1;
 
-                                }
-
-                            }
-
-                        } else if (button2.getName().equals("mid")) {
-
-                            for (Button button3 : buttons) {
-
-                                if (button3.getName().equals("botRight") && button3.getCharInIt() == charToCheck) {
-
-                                    return true;
+                                    }
 
                                 }
 
-                            }
+                                break;
+                            case "mid":
 
-                        } else if (button2.getName().equals("midLeft")) {
+                                for (Button button3 : buttons) {
 
-                            for (Button button3 : buttons) {
+                                    if (button3.getName().equals("botRight") && button3.getCharInIt() == charToCheck) {
 
-                                if (button3.getName().equals("botLeft") && button3.getCharInIt() == charToCheck) {
+                                        return 1;
 
-                                    return true;
+                                    }
 
                                 }
 
-                            }
+                                break;
+                            case "midLeft":
 
+                                for (Button button3 : buttons) {
+
+                                    if (button3.getName().equals("botLeft") && button3.getCharInIt() == charToCheck) {
+
+                                        return 1;
+
+                                    }
+
+                                }
+
+                                break;
                         }
 
                     }
@@ -330,7 +419,7 @@ public class GamePlay {
 
                                 if (button3.getName().equals("midRight") && button3.getCharInIt() == charToCheck) {
 
-                                    return true;
+                                    return 1;
 
                                 }
 
@@ -356,7 +445,7 @@ public class GamePlay {
 
                                 if (button3.getName().equals("botRight") && button3.getCharInIt() == charToCheck) {
 
-                                    return true;
+                                    return 1;
 
                                 }
 
@@ -368,7 +457,7 @@ public class GamePlay {
 
                                 if (button3.getName().equals("topRight") && button3.getHasAPlayInIt()) {
 
-                                    return true;
+                                    return 1;
 
                                 }
 
@@ -394,7 +483,7 @@ public class GamePlay {
 
                                 if (button3.getName().equals("bot") && button3.getCharInIt() == charToCheck) {
 
-                                    return true;
+                                    return 1;
 
                                 }
 
@@ -420,7 +509,7 @@ public class GamePlay {
 
                                 if (button3.getName().equals("botRight") && button3.getCharInIt() == charToCheck) {
 
-                                    return true;
+                                    return 1;
 
                                 }
 
@@ -436,7 +525,23 @@ public class GamePlay {
 
         }
 
-        return false;
+        for (Button button : buttons) {
+
+            if (button.getHasAPlayInIt()) {
+
+                buttonsWithPlayInIt++;
+
+            }
+
+        }
+
+        if (buttonsWithPlayInIt == 9) {
+
+            return 2;
+
+        }
+
+        return 0;
 
     }
 
