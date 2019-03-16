@@ -78,7 +78,7 @@ public class GamePlay {
     static ImageIcon getIcon(String iconName) {
 
         return new ImageIcon(GamePlay.class.getResource(iconName));
-        
+
     }
 
 }
